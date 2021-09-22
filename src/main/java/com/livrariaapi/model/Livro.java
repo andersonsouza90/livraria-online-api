@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Livro {
 	
+	private long id;
 	private String titulo;
 	private LocalDate dataLancamento;
 	private int numeroPaginas;

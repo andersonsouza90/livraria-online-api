@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Autor {
 	
+	private long id;
 	private String nome;
 	private String email;
 	private LocalDate dataNascimento;

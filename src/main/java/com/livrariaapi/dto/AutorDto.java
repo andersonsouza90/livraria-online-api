@@ -13,6 +13,7 @@ import lombok.Setter;
 @Getter @Setter
 public class AutorDto {
 	
+	private long id;
 	@NotBlank
 	private String nome;
 	@Email

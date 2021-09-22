@@ -2,6 +2,7 @@ package com.livrariaapi.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -23,6 +24,7 @@ public class LivroService {
 
 	public void cadastrar(LivroDto dto) {
 		Livro livro = modelMapper.map(dto, Livro.class);
+		livro.setId((long) new Random().nextInt(100));
 		livros.add(livro);
 	}
 

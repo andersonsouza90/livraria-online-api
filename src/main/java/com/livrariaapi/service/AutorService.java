@@ -2,6 +2,8 @@ package com.livrariaapi.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -26,7 +28,8 @@ public class AutorService {
 
 	public void cadastrar(AutorDto dto) {
 		Autor autor = modelMapper.map(dto, Autor.class);
+		autor.setId((long) new Random().nextInt(100));
 		autores.add(autor);
 	}
-
+	
 }
