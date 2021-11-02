@@ -26,5 +26,5 @@ public class LivroDto {
 	@NotNull
 	@Min(100)
 	private int numeroPaginas;
-	private Autor autor;
+	private AutorDto autor;
 }

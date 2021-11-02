@@ -10,13 +10,16 @@ import javax.validation.constraints.Size;
 
 import com.livrariaapi.model.Autor;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class LivroDtoForm {
 	
-	private long id;
 	@NotBlank
 	@Size(min = 10)
 	private String titulo;
@@ -26,5 +29,6 @@ public class LivroDtoForm {
 	@NotNull
 	@Min(100)
 	private int numeroPaginas;
-	private Autor autor;
+	
+	private Long autorId;
 }
