@@ -14,7 +14,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.livrariaapi.dto.AutorDtoForm;
 import com.livrariaapi.model.Autor;
 
 @ExtendWith(SpringExtension.class)
@@ -65,7 +64,7 @@ public class AutorRepositoryTest {
     Autor autor = new Autor("Dandy", "autor@email.com", LocalDate.parse("1990-01-01"), "Mini curriculo aqui...");
     em.persist(autor);
 
-    autor.atualizarInformacoes("Anderson", "dandy@email.com", LocalDate.parse("1990-01-01"), "Mini curriculo aqui...");
+    autor.atualizarInformacoes("Anderson Souza", "dandy@email.com", LocalDate.parse("1990-01-01"), "Mini curriculo aqui...");
     em.merge(autor);
 
     List<Autor> autores = autorRepository.findAll();
@@ -74,7 +73,7 @@ public class AutorRepositoryTest {
     	.hasSize(2) // hasSize = 2 por que já tem um cadastrado no banco
     	.extracting(Autor::getNome, Autor::getEmail, Autor::getDataNascimento, Autor::getMiniCurriculo)
     	.containsExactlyInAnyOrder(
-    			Assertions.tuple("Anderson", "dandy@email.com", LocalDate.parse("1990-01-01"), "Mini curriculo aqui..."),
+    			Assertions.tuple("Anderson Souza", "dandy@email.com", LocalDate.parse("1990-01-01"), "Mini curriculo aqui..."),
     			Assertions.tuple("Dandy teste", "dandy@gmail.com", LocalDate.parse("1990-05-02"), "Mini curriculo aqui...")
     	);
   }
