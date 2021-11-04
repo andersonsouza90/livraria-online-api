@@ -14,12 +14,15 @@ import com.livrariaapi.service.RelatorioService;
 @RequestMapping("/relatorios")
 public class RelatoriosController {
 	
-	@Autowired
-	private RelatorioService service;
+	private final RelatorioService relatorioService;
+
+	public RelatoriosController(RelatorioService relatorioService) {
+		this.relatorioService = relatorioService;
+	}
 	
 	@GetMapping("/percentualLivros")
 	public List<ItemRelatorioPercentualLivros> relatorioPercentualLivros(){
-		return service.relatorioPercentualLivros();
+		return relatorioService.relatorioPercentualLivros();
 	}
 	
 }

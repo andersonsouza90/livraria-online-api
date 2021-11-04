@@ -13,15 +13,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.context.ActiveProfiles;
 
 import com.livrariaapi.dto.LivroDto;
 import com.livrariaapi.dto.LivroDtoForm;
+import com.livrariaapi.model.Autor;
 import com.livrariaapi.repository.AutorRepository;
 import com.livrariaapi.repository.LivroRepository;
 
 @ExtendWith(MockitoExtension.class)
-@ActiveProfiles("test") // para usar o properties-test
 public class LivroServiceTest {
 
   @Mock
@@ -38,15 +37,21 @@ public class LivroServiceTest {
 
   @Test
   void deveriaCadastrarLivro() {
-	LivroDtoForm livroFormDto = getTransacaoFormDto();
-    LivroDto livroDto = livroService.cadastrar(livroFormDto);
-
+	LivroDtoForm livroDtoForm = getTransacaoFormDto();
+    
+    Mockito
+    	.when(autorRepository.getById(livroDtoForm.getAutorId()))
+    	.thenReturn(new Autor(livroDtoForm.getAutorId(), "Dandy", "dandy@gmail.com", LocalDate.now(), "Teste"));
+    
+    LivroDto livroDto = livroService.cadastrar(livroDtoForm);
+    
     Mockito.verify(livroRepository).save(Mockito.any());
+    
 
-    assertEquals(livroFormDto.getTitulo(), livroDto.getTitulo());
-    assertEquals(livroFormDto.getDataLancamento(), livroDto.getDataLancamento());
-    assertEquals(livroFormDto.getNumeroPaginas(), livroDto.getNumeroPaginas());
-    assertEquals(livroFormDto.getAutorId(), livroDto.getAutor().getId());
+    assertEquals(livroDtoForm.getTitulo(), livroDto.getTitulo());
+    assertEquals(livroDtoForm.getDataLancamento(), livroDto.getDataLancamento());
+    assertEquals(livroDtoForm.getNumeroPaginas(), livroDto.getNumeroPaginas());
+    assertEquals(livroDtoForm.getAutorId(), livroDto.getAutor().getId());
   }
 
   @Test
