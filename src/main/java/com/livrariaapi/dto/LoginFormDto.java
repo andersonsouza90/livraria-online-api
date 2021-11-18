@@ -2,6 +2,7 @@ package com.livrariaapi.dto;
 
 import javax.validation.constraints.NotBlank;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data

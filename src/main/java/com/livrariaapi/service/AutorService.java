@@ -20,12 +20,14 @@ import com.livrariaapi.repository.LivroRepository;
 @Service
 public class AutorService {
 	
-	private ModelMapper modelMapper = new ModelMapper();
 	@Autowired
-	AutorRepository repository;
+	private ModelMapper modelMapper;
 	
 	@Autowired
-	LivroRepository livroRepository;
+	private AutorRepository repository;
+	
+	@Autowired
+	private LivroRepository livroRepository;
 	
 	public Page<AutorDto> listar(Pageable paginacao) {
 		Page<Autor> autores = repository.findAll(paginacao);
