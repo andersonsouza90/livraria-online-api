@@ -1,6 +1,5 @@
 package com.livrariaapi.controller;
 
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -26,13 +25,12 @@ import com.livrariaapi.model.Usuario;
 import com.livrariaapi.repository.PerfilRepository;
 import com.livrariaapi.repository.UsuarioRepository;
 
-
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 @Transactional
-class AutorControllerTest {
+class UsuarioControllerTest {
 
 	@Autowired
 	private MockMvc mvc;
@@ -60,31 +58,29 @@ class AutorControllerTest {
 	}
 	
 	@Test
-	void naoDeveriaCadastrarAutorComDadosIncompletos() throws Exception {
+	void naoDeveriaCadastrarUsuarioComDadosIncompletos() throws Exception {
 		String json = "{}";
-		
+
 		mvc
 		.perform(
-				post("/autores")
+				post("/usuarios")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(json)
 				.header("Authorization", "Bearer " + token))
 				.andExpect(status().isBadRequest());
+
+		
 	}
 	
 	@Test
-	void DeveriaCadastrarAutorComDadosCompletos() throws Exception {
-		String json = "{\"nome\":\"fulano da silva\","
-				+ "\"email\":\"fulano@fulano.com\","
-				+ "\"nascimento\":\"1990-01-01\","
-				+ "\"miniCurriculo\":\"livros do fulano\"}";
-		String jsonRetornado = "{\"nome\":\"fulano da silva\","
-				+ "\"email\":\"fulano@fulano.com\","
-				+ "\"miniCurriculo\":\"livros do fulano\"}";
+	void deveriaCadastrarUsuarioComDadosCompletos() throws Exception {
+		String json = "{\"nome\":\"anderson\",\"login\":\"anderson\",\"perfilId\":1,\"email\":\"fulano@fulano.com\"}";
+		
+		String jsonRetornado = "{\"nome\":\"anderson\",\"login\":\"anderson\"}";
 		
 		mvc
 		.perform(
-				post("/autores")
+				post("/usuarios")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(json)
 				.header("Authorization", "Bearer " + token))
@@ -94,5 +90,5 @@ class AutorControllerTest {
 
 		
 	}
-	
+
 }

@@ -10,34 +10,60 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.context.ActiveProfiles;
+import org.modelmapper.ModelMapper;
 
 import com.livrariaapi.dto.AutorDto;
 import com.livrariaapi.dto.AutorDtoForm;
+import com.livrariaapi.model.Autor;
 import com.livrariaapi.repository.AutorRepository;
 
 @ExtendWith(MockitoExtension.class)
-@ActiveProfiles("test") // para usar o properties-test
-public class AutorServiceTest {
+class AutorServiceTest {
+	
+	@Mock
+	private AutorRepository autorRepository;
+	
+	@InjectMocks
+	private AutorService autorService;
+	
+	@Mock
+	private ModelMapper modelMapper;
 
-  @Mock
-  private AutorRepository autorRepository;
-
-  @InjectMocks
-  private AutorService autorService;
-
-  @Test
-  void deveriaCadastrarUmAutor() {
-    AutorDtoForm autorDtoForm = new AutorDtoForm("Autor", "autor@email.com", LocalDate.now(), "Aqui vai um texto grande!....");
-    AutorDto autorDto = autorService.cadastrar(autorDtoForm);
-
-    Mockito.verify(autorRepository).save(Mockito.any());
-
-    assertEquals(autorDtoForm.getNome(), autorDto.getNome());
-    assertEquals(autorDtoForm.getEmail(), autorDto.getEmail());
-    assertEquals(autorDtoForm.getDataNascimento(), autorDto.getDataNascimento());
-    assertEquals(autorDtoForm.getMiniCurriculo(), autorDto.getMiniCurriculo());
-  }
+	@Test
+	void deveriaCadastrarUmAutor() {
+		AutorDtoForm formDTO = new AutorDtoForm(
+				"Anderson", 
+				"anderson@gmail.com",
+				LocalDate.of(1997, 5, 28),
+				"Livros sobre tudo"
+				);
+		
+		Autor autor = new Autor(formDTO.getNome(),
+				formDTO.getEmail(),
+				formDTO.getDataNascimento(),
+				formDTO.getMiniCurriculo());
+		
+		Mockito
+		.when(modelMapper.map(formDTO, Autor.class))
+		.thenReturn(autor);
+		
+		Mockito
+		.when(modelMapper.map(autor, AutorDto.class))
+		.thenReturn(new AutorDto(
+				null,
+				autor.getNome(),
+				autor.getEmail(),
+				autor.getMiniCurriculo()));
+		
+		
+		AutorDto dto = autorService.cadastrar(formDTO);
+		
+		Mockito.verify(autorRepository).save(Mockito.any());
+		
+		assertEquals(formDTO.getNome(), dto.getNome());
+		assertEquals(formDTO.getEmail(), dto.getEmail());
+		assertEquals(formDTO.getMiniCurriculo(), dto.getMiniCurriculo());
+		
+	}
 
 }
-
