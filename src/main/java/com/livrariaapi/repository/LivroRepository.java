@@ -7,9 +7,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import com.livrariaapi.dto.QuantidadeDeLivrosDTO;
+import com.livrariaapi.model.Autor;
 import com.livrariaapi.model.Livro;
 
 public interface LivroRepository extends JpaRepository<Livro, Long>{
+	
+	void deleteByAutor(Autor autor);
 
 	@Query("select new br.com.alura.livraria.dto.QuantidadeDeLivrosDTO("
 			+ "a.autor.nome, "
