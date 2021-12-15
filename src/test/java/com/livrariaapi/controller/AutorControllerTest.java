@@ -57,7 +57,7 @@ class AutorControllerTest {
 	
 	@BeforeEach
 	public void gerarToken() {
-		Usuario logado = new Usuario("Artur", "artur", "123456", "email@email.com");
+		Usuario logado = new Usuario("Dandy", "dandy", "123456", "email@email.com");
 		Perfil admin = perfilRepository.findById(1l).get();
 		
 		PerfilDto adminDto = modelMapper.map(admin, PerfilDto.class);
@@ -83,8 +83,8 @@ class AutorControllerTest {
 	@Test
 	void deveriaCadastrarAutorComDadosValidos() throws Exception {
 
-		String json = "{\"nome\":\"Nome do Autor\", \"email\":\"autor@email.com\", \"dataDeNascimento\":\"1935-10-23\", \"miniCurriculo\":\"Lorem ipsum\"}";
-		String jsonEsperado = "{\"nome\":\"Nome do Autor\", \"email\":\"autor@email.com\", \"dataDeNascimento\":\"23/10/1935\", \"miniCurriculo\":\"Lorem ipsum\"}";
+		String json = "{\"nome\":\"Nome do Autor\", \"email\":\"autor@email.com\", \"dataDeNascimento\":\"1990-10-23\", \"miniCurriculo\":\"Lorem ipsum\"}";
+		String jsonEsperado = "{\"nome\":\"Nome do Autor\", \"email\":\"autor@email.com\", \"dataDeNascimento\":\"23/10/1990\", \"miniCurriculo\":\"Lorem ipsum\"}";
 
 		mvc.perform(post("/autores")
 				.contentType(MediaType.APPLICATION_JSON)

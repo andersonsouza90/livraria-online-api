@@ -1,97 +1,120 @@
 package com.livrariaapi.controller;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.time.LocalDate;
+
 import javax.transaction.Transactional;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.livrariaapi.dto.AutorDto;
+import com.livrariaapi.dto.PerfilDto;
+import com.livrariaapi.infra.security.TokenService;
+import com.livrariaapi.model.Autor;
+import com.livrariaapi.model.Perfil;
+import com.livrariaapi.model.Usuario;
+import com.livrariaapi.repository.AutorRepository;
+import com.livrariaapi.repository.PerfilRepository;
+import com.livrariaapi.repository.UsuarioRepository;
+
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-@ActiveProfiles("test") // para usar o properties-test
+@ActiveProfiles("test")
 @Transactional
 class LivroControllerTest {
-	
+
 	@Autowired
 	private MockMvc mvc;
+
+	@Autowired
+	private AutorRepository autorRepository;
 	
-	private AutorDto cadastrarAutor() throws Exception {
-		String jsonAutor = "{\r\n"
-				+ "  \"dataNascimento\": \"1990-05-02\",\r\n"
-				+ "  \"email\": \"dandy@gmail.com\",\r\n"
-				+ "  \"miniCurriculo\": \"Aqui vai o mini curriculo\",\r\n"
-				+ "  \"nome\": \"Anderson\"\r\n"
-				+ "}";
+	@Autowired
+	private UsuarioRepository usuarioRepository;
 	
-		MvcResult mvcResult = mvc
-				.perform(MockMvcRequestBuilders.post("/autores")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(jsonAutor))
-				.andExpect(MockMvcResultMatchers.status().isCreated())
-				.andExpect(MockMvcResultMatchers.header().exists("Location"))
-				.andExpect(MockMvcResultMatchers.content().json(jsonAutor))
-				.andReturn();
+	@Autowired
+	private PerfilRepository perfilRepository;
 	
-		String autor = mvcResult.getResponse().getContentAsString();
+	@Autowired
+	private ModelMapper modelMapper;
+	
+	@Autowired
+	private TokenService tokenService;
+	
+	private String token;
+	
+	private Autor criaAutorParaTeste(String nome) {
+		return new Autor(nome, "autor@email.com", LocalDate.parse("1935-10-23"), "Lorem Ipsum");
+	}
+	
+	@BeforeEach
+	private void gerarToken() {
+		Usuario logado = new Usuario("Artur", "artur", "123456", "email@email.com");
+		Perfil admin = perfilRepository.findById(1l).get();
 		
-		ObjectMapper objectMapper = new ObjectMapper();
-		objectMapper.registerModule(new JavaTimeModule());
-		objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+		PerfilDto adminDto = modelMapper.map(admin, PerfilDto.class);
 		
-		return objectMapper.readValue(autor, AutorDto.class);
+		logado.adicionarPerfil(adminDto);
+		usuarioRepository.save(logado);
+		Authentication authentication = new UsernamePasswordAuthenticationToken(logado, logado.getLogin());
+		this.token = tokenService.gerarToken(authentication);
 	}
 
 	@Test
 	void naoDeveriaCadastrarLivroComDadosIncompletos() throws Exception {
-		String dados = "{}";
-		
-		mvc
-		.perform(
-				MockMvcRequestBuilders.post("/livros")
+		String json = "{}";
+
+		mvc.perform(post("/livros")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(dados))
-			.andExpect(MockMvcResultMatchers.status().isBadRequest());
+				.content(json)
+				.header("Authorization", "Bearer " + token))
+				.andExpect(status().isBadRequest());
 	}
-	
+
 	@Test
-	void deveriaCadastrarAutorComDadosCompletos() throws Exception {
-		AutorDto autorDto = cadastrarAutor();
-		
-		String dados = "{\"idAutor\":"+ autorDto.getId() +" ,"
-				+ "\"nome\":\"Anderson\","
-				+ "\"email\":\"dandy@gmail.com\","
-				+ "\"dataNascimento\":\"1990-05-02\","
-				+ "\"miniCurriculo\":\"Aqui vai o mini curriculo\"}";
-		
-		String dadosRetorno = "{\"autor\":"+ autorDto +" ,"
-				+ "\"nome\":\"Anderson\","
-				+ "\"email\":\"dandy@gmail.com\","
-				+ "\"dataNascimento\":\"1990-05-02\","
-				+ "\"miniCurriculo\":\"Aqui vai o mini curriculo\"}";
-		
-		mvc
-		.perform(
-				MockMvcRequestBuilders.post("/autores")
+	void deveriaCadastrarLivroComDadosValidos() throws Exception {
+		Autor autor1 = criaAutorParaTeste("Nome do Autor1");
+		autorRepository.save(autor1);
+
+		String json = "{\"titulo\":\"Nome do livro\", \"dataDeLancamento\":\"2010-06-13\", \"numeroDePaginas\":322, \"autorId\":"
+				+ autor1.getId() + "}";
+		String jsonEsperado = "{\"titulo\":\"Nome do livro\", \"dataDeLancamento\":\"13/06/2010\", \"numeroDePaginas\":322, \"autorId\":"
+				+ autor1.getId() + "}";
+
+		mvc.perform(post("/livros")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(dados))
-			.andExpect(MockMvcResultMatchers.status().isCreated())
-			.andExpect(MockMvcResultMatchers.header().exists("Location"));
-			//.andExpect(MockMvcResultMatchers.content().json(dadosRetorno));
+				.content(json)
+				.header("Authorization", "Bearer " + token))
+				.andExpect(status().isCreated()).andExpect(header().exists("Location"))
+				.andExpect(content().json(jsonEsperado));
+	}
+
+	@Test
+	void naoDeveriaCadastrarLivroComAutorInexistente() throws Exception {
+		String json = "{\"titulo\":\"Nome do livro\", \"dataDeLancamento\":\"2010-06-13\", \"numeroDePaginas\":322, \"autorId\":0}";
+
+		mvc.perform(post("/livros")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(json)
+				.header("Authorization", "Bearer " + token))
+				.andExpect(status().isInternalServerError());
 	}
 
 }
