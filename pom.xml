@@ -63,8 +63,13 @@
 		<dependency>
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-core</artifactId>
-			<!-- Quando não informamos a versão, o spring gerencia de acordo com sua 
-				própria versão -->
+			<!-- Quando nao informamos a versao, o spring gerencia de acordo com sua 
+				propria versao -->
+		</dependency>
+		
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
 		</dependency>
 
 		<dependency>
@@ -99,6 +104,7 @@
 	</dependencies>
 
 	<build>
+	<finalName>livraria-api</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
