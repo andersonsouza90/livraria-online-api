@@ -30,7 +30,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
-@RequestMapping("livros")
+@RequestMapping("/livros")
 @Api(tags = "Livro")
 public class LivroController {
 

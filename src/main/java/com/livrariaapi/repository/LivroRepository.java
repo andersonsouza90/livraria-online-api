@@ -14,7 +14,7 @@ public interface LivroRepository extends JpaRepository<Livro, Long>{
 	
 	void deleteByAutor(Autor autor);
 
-	@Query("select new br.com.alura.livraria.dto.QuantidadeDeLivrosDTO("
+	@Query("select new com.livrariaapi.dto.QuantidadeDeLivrosDTO("
 			+ "a.autor.nome, "
 			+ "count(*), "
 			+ "round(count(*) * 100.0 / (select count(*) from Livro a2) * 1.0, 2) as percentage)"

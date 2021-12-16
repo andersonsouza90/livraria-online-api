@@ -47,7 +47,7 @@ public class AutorService {
 	@Transactional
 	public AutorDto atualizar(AtualizarAutorFormDto dto) {
 		Autor a = repository.getById(dto.getId());
-		a.atualizarInformacoes(dto.getNome(), dto.getEmail(), dto.getDataNascimento(), dto.getMiniCurriculo());
+		a.atualizarInformacoes(dto.getNome(), dto.getEmail(), dto.getNascimento(), dto.getMiniCurriculo());
 		return modelMapper.map(a, AutorDto.class);
 	}
 	

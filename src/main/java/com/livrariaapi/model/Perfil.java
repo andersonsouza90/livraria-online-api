@@ -15,23 +15,24 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@Getter 
-@Setter  
+@Getter
+@Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(of = "id")
 @Entity
 @Table(name = "perfis")
+@EqualsAndHashCode(of = "id")
 public class Perfil implements GrantedAuthority {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private String nome;
 	
+	private String nome;
+
 	@Override
 	public String getAuthority() {
 		return this.nome;
 	}
-
 }

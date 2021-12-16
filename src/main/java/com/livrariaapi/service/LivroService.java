@@ -67,7 +67,7 @@ public class LivroService {
 	@Transactional
 	public LivroDto atualizar(AtualizarLivroFormDto dto) {
 		Livro l = repository.getById(dto.getId());
-		l.atualizarInformacoes(dto.getTitulo(), dto.getDataLancamento(), dto.getNumeroPaginas());
+		l.atualizarInformacoes(dto.getTitulo(), dto.getLancamento(), dto.getNumeroDePaginas());
 		return modelMapper.map(l, LivroDto.class);
 	}
 	

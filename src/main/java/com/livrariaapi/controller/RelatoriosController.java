@@ -7,22 +7,19 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.livrariaapi.dto.ItemRelatorioPercentualLivros;
+import com.livrariaapi.dto.QuantidadeDeLivrosDTO;
 import com.livrariaapi.service.RelatorioService;
+
 
 @RestController
 @RequestMapping("/relatorios")
 public class RelatoriosController {
-	
-	private final RelatorioService relatorioService;
 
-	public RelatoriosController(RelatorioService relatorioService) {
-		this.relatorioService = relatorioService;
-	}
+	@Autowired
+	private RelatorioService service;
 	
-	@GetMapping("/percentualLivros")
-	public List<ItemRelatorioPercentualLivros> relatorioPercentualLivros(){
-		return relatorioService.relatorioPercentualLivros();
+	@GetMapping("/livraria")
+	public List<QuantidadeDeLivrosDTO> relatorioQuantidadeDeLivros(){
+		return service.relatorioQuantidadeDeLivros();
 	}
-	
 }

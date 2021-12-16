@@ -28,7 +28,6 @@ import com.livrariaapi.model.Usuario;
 import com.livrariaapi.repository.PerfilRepository;
 import com.livrariaapi.repository.UsuarioRepository;
 
-
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -52,7 +51,7 @@ class RelatoriosControllerTest {
 
 	@BeforeEach
 	public void gerarToken() {
-		Usuario logado = new Usuario("Anderson", "anderson", "123456");
+		Usuario logado = new Usuario("Leonardo", "leonardo", "123456");
 		Perfil admin = perfilRepository.findById(1l).get();
 		logado.adicionarPerfil(admin);
 		usuarioRepository.save(logado);

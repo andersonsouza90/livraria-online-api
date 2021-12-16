@@ -40,7 +40,7 @@ class AutorServiceTest {
 		
 		Autor autor = new Autor(formDTO.getNome(),
 				formDTO.getEmail(),
-				formDTO.getDataNascimento(),
+				formDTO.getNascimento(),
 				formDTO.getMiniCurriculo());
 		
 		Mockito

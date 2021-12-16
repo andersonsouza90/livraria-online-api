@@ -5,17 +5,17 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.livrariaapi.dto.ItemRelatorioPercentualLivros;
-import com.livrariaapi.repository.AutorRepository;
+import com.livrariaapi.dto.QuantidadeDeLivrosDTO;
+import com.livrariaapi.repository.LivroRepository;
 
 @Service
 public class RelatorioService {
 	
 	@Autowired
-	private AutorRepository repository;
-
-	public List<ItemRelatorioPercentualLivros> relatorioPercentualLivros() {
-		return repository.relatorioPercentualLivros();
+	private LivroRepository repository;
+	
+	public List<QuantidadeDeLivrosDTO> relatorioQuantidadeDeLivros(){
+		return repository.relatorioQuantidadeDeLivros();
 	}
 
 }

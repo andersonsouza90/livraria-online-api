@@ -1,8 +1,9 @@
-CREATE TABLE autores
-(
-  id SERIAL primary key,
-  nome varchar(100)  NOT NULL,
-  email varchar(100)  NOT NULL,
-  dt_nascimento date,
-  mini_curriculo varchar(1000)
-)
+create table autores(
+	id serial NOT NULL PRIMARY KEY,
+	nome varchar(100) not null,
+	email varchar(100) not null,
+	nascimento date not null,
+	mini_curriculo varchar(200) not null
+	);
+	
+	

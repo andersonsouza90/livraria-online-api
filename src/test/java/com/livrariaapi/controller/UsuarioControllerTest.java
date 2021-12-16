@@ -48,7 +48,7 @@ class UsuarioControllerTest {
 
 	@BeforeEach
 	public void gerarToken() {
-		Usuario logado = new Usuario("Anderson", "anderson", "123456");
+		Usuario logado = new Usuario("Leonardo", "leonardo", "123456");
 		Perfil admin = perfilRepository.findById(1l).get();
 		logado.adicionarPerfil(admin);
 		usuarioRepository.save(logado);
@@ -74,9 +74,9 @@ class UsuarioControllerTest {
 	
 	@Test
 	void deveriaCadastrarUsuarioComDadosCompletos() throws Exception {
-		String json = "{\"nome\":\"anderson\",\"login\":\"anderson\",\"perfilId\":1,\"email\":\"fulano@fulano.com\"}";
+		String json = "{\"nome\":\"leonardo\",\"login\":\"leonardo\",\"perfilId\":1,\"email\":\"fulano@fulano.com\"}";
 		
-		String jsonRetornado = "{\"nome\":\"anderson\",\"login\":\"anderson\"}";
+		String jsonRetornado = "{\"nome\":\"leonardo\",\"login\":\"leonardo\"}";
 		
 		mvc
 		.perform(
