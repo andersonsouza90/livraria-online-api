@@ -1,5 +1,6 @@
 package com.livrariaapi.dto;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 import com.sun.istack.NotNull;
@@ -17,5 +18,9 @@ public class UsuarioFormDto {
 	
 	@NotNull
 	private Long perfilId;
+	
+	@NotBlank
+	@Email
+	private String email;
 
 }
